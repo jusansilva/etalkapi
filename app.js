@@ -13,6 +13,7 @@ var fs = require("fs");
 require("dotenv/config");
 
 var app = express();
+var port = normalizePort(process.env.PORT || '3000');
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -26,7 +27,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 console.log("conectando no mongo");
 mongoose.connect(
-  process.env.MONGO_URL | "mongodb+srv://san:san12345@cluster0.pouc0.mongodb.net/?retryWrites=true&w=majority",
+  process.env.MONGO_URL,
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err) => {
     console.log("mongo connected");
@@ -51,5 +52,24 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+function normalizePort(val) {
+  var port = parseInt(val, 10);
 
-module.exports = app;
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+
+
+app.listen(port, () => console.log(`Listening on port : ${port}` ))
+
+//module.exports = app;

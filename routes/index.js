@@ -19,9 +19,11 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 /* GET home page. */
-router.get("/", async  function (req, res, next) {
+router.get("/", async (req, res, next) => {
+  console.log("to aqui");
   const items = await imgModel.find({});
-      res.render("pages/home", { title: "Etalk", items: items});
+  console.log(items);
+  return res.render("pages/home", { title: "Etalk", items: items });
 });
 
 router.post("/", upload.single("image"), async function (req, res, next) {
@@ -29,37 +31,37 @@ router.post("/", upload.single("image"), async function (req, res, next) {
     name: req.body.name,
     img: {
       data: fs.readFileSync(
-        path.join(__dirname +"/uploads/" + req.file.filename)
+        path.join(__dirname + "/uploads/" + req.file.filename)
       ),
       contentType: "image/png",
     },
   };
-  
-  const exist = await imgModel.find({name:req.body.name})
-  if(exist){
-    await imgModel.updateOne({name: req.body.name}, obj);
-    const back  = await imgModel.find({})
+
+  const exist = await imgModel.find({ name: req.body.name });
+  if (exist) {
+    await imgModel.updateOne({ name: req.body.name }, obj);
+    const back = await imgModel.find({});
     return res.render("pages/home", { title: "Etalk", items: back });
-  }else{
+  } else {
     imgModel.create(obj, (err, item) => {
       if (err) {
         console.log(err);
       } else {
         // item.save();
-      return   res.render("pages/home", { title: "Etalk", items: item });
+        return res.render("pages/home", { title: "Etalk", items: item });
       }
     });
   }
 });
 
-router.get("/img/:name", async function(req, res){
-  const img = await imgModel.findOne({name: req.params.name});
+router.get("/img/:name", async function (req, res) {
+  const img = await imgModel.findOne({ name: req.params.name });
 
-  res.status(200).json(img)
-})
+  res.status(200).json(img);
+});
 
 router.get("/health-check", (req, res) => {
-  res.json({error: false,  message: "I'm alive"})
-})
+  res.json({ error: false, message: "I'm alive" });
+});
 
 module.exports = router;
