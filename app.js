@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 console.log("conectando no mongo");
 mongoose.connect(
-  process.env.MONGO_URL,
+  process.env.MONGO_URL | "mongodb+srv://san:san12345@cluster0.pouc0.mongodb.net/?retryWrites=true&w=majority",
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err) => {
     console.log("mongo connected");
