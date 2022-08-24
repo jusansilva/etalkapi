@@ -58,4 +58,8 @@ router.get("/img/:name", async function(req, res){
   res.status(200).json(img)
 })
 
+router.get("/health-check", (req, res) => {
+  res.json({error: false,  message: "I'm alive"})
+})
+
 module.exports = router;
