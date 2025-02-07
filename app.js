@@ -1,20 +1,23 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-const expressLayouts = require("express-ejs-layouts");
-var mongoose = require("mongoose");
+import createError from 'http-errors';
+import express from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import expressLayouts from 'express-ejs-layouts';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
+import { fileURLToPath } from 'url';
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
 
-var fs = require("fs");
-require("dotenv/config");
+import fs from 'fs';
+dotenv.config();
 
 var app = express();
-var port = normalizePort(process.env.PORT || '3000');
-
+var port = normalizePort(process.env.PORT || "3000");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -25,14 +28,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/uploads', express.static(path.join(__dirname, 'routes','uploads')));
+
 console.log("conectando no mongo");
-mongoose.connect(
-  process.env.MONGO_URL,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  (err) => {
-    console.log("mongo connected");
-  }
-);
+await mongoose.connect(process.env.MONGODB_URI);
+console.log('Connected to MongoDB');
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
@@ -68,8 +68,4 @@ function normalizePort(val) {
   return false;
 }
 
-
-
-app.listen(port, () => console.log(`Listening on port : ${port}` ))
-
-//module.exports = app;
+app.listen(port, () => console.log(`Listening on port : ${port}`));

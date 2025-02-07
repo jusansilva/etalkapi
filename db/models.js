@@ -1,12 +1,13 @@
-var mongoose = require('mongoose');
- 
-var imageSchema = new mongoose.Schema({
-    name: String,
-    img:
-    {
-        data: Buffer,
-        contentType: String
-    }
+import mongoose from 'mongoose';
+
+const imgSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  img: {
+    data: String,
+    contentType: String
+  }
 });
-  
-module.exports = new mongoose.model('Image', imageSchema);
+
+const imgModel = mongoose.model('Image', imgSchema);
+
+export default imgModel;
