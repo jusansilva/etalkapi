@@ -13,14 +13,17 @@
             <label for="name" class="form-label">Qual o seu projeto?</label>
             <input type="text" class="form-control" id="name" value="" name="name" required />
           </div>
-          <div class="mb-3">
-            <input class="btn btn-primary mb-3" type="submit" value="Enviar" />
+          <div class="mb-3 ">
+            <input class="btn btn-primary mb-3 form-control" type="submit" value="Enviar" />
           </div>
         </form>
       </div>
       <div class="col"></div>
     </div>
     <div class="row">
+      <div>
+        <a class="btn btn-primary form-control" href="<%= url %>/screem/<%= user.id %>" target="_blank">Compartilhar Todos</a>
+      </div>
       <% items.forEach(function(image, index) { %>
         <div class="col-md-4 text-center mb-4">
           <div style="padding: 10px;">
@@ -32,6 +35,7 @@
               </h5>
               <p>
                 <%= image.desc %>
+                <a class="btn btn-primary" href="<%= url %>/screem/<%= image.id %>" target="_blank">Compartilhar</a>
               </p>
             </div>
           </div>
